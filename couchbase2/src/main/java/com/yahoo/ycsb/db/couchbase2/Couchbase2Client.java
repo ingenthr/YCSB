@@ -633,10 +633,10 @@ public class Couchbase2Client extends DB {
           @Override
           public Observable<RawJsonDocument> call(AsyncN1qlQueryRow row) {
             String id = new String(row.byteValue());
-            return bucket.async().get(
-              id.substring(id.indexOf(table + SEPARATOR), id.lastIndexOf('"')),
-              RawJsonDocument.class
-            );
+            return Observable.just(RawJsonDocument.create(
+              id.substring(id.indexOf(table + SEPARATOR)), id.lastIndexOf('"'),
+              "{}"
+            ));
           }
         })
         .map(new Func1<RawJsonDocument, HashMap<String, ByteIterator>>() {
